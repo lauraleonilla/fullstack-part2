@@ -1,11 +1,18 @@
 import React from 'react'
 
 
-const Title = ({ course }) => {
+const Content = ({ course }) => {
+    const exec = course.map(e => e.parts.map(j => j.exercises))
+    const reducer = exec.reduce((a, c) => a + c)
     return (
         <div>
-            {course.map(e => <h1 key={e.name}>{e.name}</h1>)}
-            {course.map(e => e.parts.map(j => <p key={j.name}>{j.name}</p>))}
+            {course.map(e => 
+                [<h1 key={e.name}>{e.name}</h1>, 
+                <div key={e.id}>
+                {e.parts.map(j =>
+                <p key={j.name}>{j.name} {j.exercises}</p>)}
+                <p>Yhteensä tehtävää</p>
+                </div>])}
         </div>
     )
 }
@@ -13,7 +20,7 @@ const Title = ({ course }) => {
 const Course = ({ course }) => {
     return (
         <div>
-           <Title course={course}/>
+           <Content course={course}/>
         </div>
     )
 }
