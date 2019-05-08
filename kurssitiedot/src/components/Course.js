@@ -1,54 +1,21 @@
 import React from 'react'
 
-const Course = ({ course }) => {
-    const headers = () => course.map(e => 
-        <Header key={e.id} course={e}/>
-    ) 
-    const courses = course.map(e => e.parts)
-    const parts = courses.map(u => u.map(k => k))
-    const res = () =>  parts.map(u =>  
-        <Content key={u.id} course={u} />
-        )
+
+const Title = ({ course }) => {
     return (
         <div>
-            {headers()}
-            {res()}
-            <Total parts={course}/> 
+            {course.map(e => <h1 key={e.name}>{e.name}</h1>)}
+            {course.map(e => e.parts.map(j => <p key={j.name}>{j.name}</p>))}
         </div>
     )
 }
 
-const Header = ({ course }) => {
+const Course = ({ course }) => {
     return (
-        <h1>{course.name}</h1>
-    )    
-} 
-
-const Part = ({ course }) => {
-    return (
-        course.map(e => {
-            return  <p key={e.id}>{e.name} {e.exercises}</p>})
+        <div>
+           <Title course={course}/>
+        </div>
     )
 }
 
-const Content = ({ course }) => {
-   return (
-  <div>
-    <Part course={course} />
-  </div>
-    )
-}
-
-const Total = ({ parts }) => {
-    const exercices = parts.map(e => e.parts)
-    const number = []
-    exercices.map(e => e.map(u => number.push(u.exercises)))
-    const total = number.reduce((a, c) => {
-        return a + c
-    }, 0)
-    return <p>Yhteensä {total} tehtävää</p>
-  }
-
-
-
-export default Course
+export { Course }
