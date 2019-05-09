@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react'
+import Person from './components/Person'
 
-function App() {
+const App = () => {
+  const [ persons, setPersons ] = useState([
+    { name: 'Arto Hellas' },
+    { name: 'LLL Hellas' }
+  ]) 
+  const [ newName, setNewName ] = useState('')
+
+  const addName = (event) => {
+    event.preventDefault()
+    const personObject = {
+        name: newName
+    }
+    setPersons(persons.concat(personObject))
+    setNewName('')
+  }
+
+  const handlePersonChange = (event) => {
+      setNewName(event.target.value)
+  }
+
+  const list = () => {
+    persons.map(e => <li>{e.name}</li>
+    )}
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h2>Puhelinluettelo</h2>
+      <form onSubmit={addName}>
+        <div>
+          nimi: <input value={newName} onChange={handlePersonChange}/>
+        </div>
+        <div>
+          <button type="submit">Lisää</button>
+        </div>
+      </form>
+      <h2>Numerot</h2>
+      <div>
+      {list()}
+      </div>
     </div>
-  );
+  )
+
 }
 
-export default App;
+export default App
