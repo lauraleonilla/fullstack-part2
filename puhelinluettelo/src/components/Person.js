@@ -3,7 +3,7 @@ import React from 'react'
 const Person = ({ contacts }) => {
   return (
       <div>
-          <p>{contacts.name}</p>
+          <p>{contacts.name} {contacts.number}</p>
       </div>
   )
 }

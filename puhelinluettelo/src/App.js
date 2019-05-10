@@ -7,30 +7,47 @@ const App = () => {
     { name: 'LLL Hellas' }
   ]) 
   const [ newName, setNewName ] = useState('')
+  const [ newNumber, setNewNumber ] = useState('')
+  const [ showAll, setShowall ] = useState('')
 
   const addName = (event) => {
     event.preventDefault()
     const personObject = {
-        name: newName
+        name: newName,
+        number: newNumber
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
+    if(persons.find(p => p.name === newName)) {
+        alert(`${newName} on jo luettelossa!`)
+    } else {
+        setPersons(persons.concat(personObject))
+        setNewName('')
+        setNewNumber('')
+    }
   }
 
   const handlePersonChange = (event) => {
       setNewName(event.target.value)
   }
 
-  const list = () => {
-    persons.map(e => <li>{e.name}</li>
-    )}
+  const handleNumberChange = (event) => {
+      setNewNumber(event.target.value)
+  }
+
+  const personsToShow = (event) => {
+      setPersons(persons.filter(e => e.name === event.target.value))
+  }
 
   return (
     <div>
       <h2>Puhelinluettelo</h2>
+        <input value={showAll} onChange={personsToShow}/>
+      <h2>Lisää uusi</h2>
       <form onSubmit={addName}>
         <div>
-          nimi: <input value={newName} onChange={handlePersonChange}/>
+          Nimi: <input value={newName} onChange={handlePersonChange}/>
+          <div>
+          Numero: <input value={newNumber} onChange={handleNumberChange}/>
+          </div>
         </div>
         <div>
           <button type="submit">Lisää</button>
@@ -38,7 +55,7 @@ const App = () => {
       </form>
       <h2>Numerot</h2>
       <div>
-      {list()}
+      {persons.map(e => <Person key={e.name} contacts={e}/>)}
       </div>
     </div>
   )
