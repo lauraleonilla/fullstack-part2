@@ -43,6 +43,10 @@ const App = () => {
       setShowall(event.target.value)
   }
 
+  const removeContact = (event) => {
+    contactService.remove(event.target)
+  }
+
   const personsToShow = persons.filter(e => e.name.toLowerCase().indexOf(showAll.toLowerCase()) !== -1)
 
   return (
@@ -61,7 +65,7 @@ const App = () => {
           <button type="submit">Lisää</button>
         </div>
       </form>
-     <Contacts contacts={personsToShow}/>
+     <Contacts contacts={personsToShow} remove={removeContact}/>
     </div>
   )
 
