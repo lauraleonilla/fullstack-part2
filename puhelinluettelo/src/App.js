@@ -33,14 +33,16 @@ const App = () => {
       setNewNumber(event.target.value)
   }
 
-  const personsToShow = (event) => {
-      setPersons(persons.filter(e => e.name === event.target.value))
+  const handleSearchChange = (event) => {
+      setShowall(event.target.value)
   }
+
+  const personsToShow = persons.filter(e => e.name.toLowerCase().indexOf(showAll.toLowerCase()) !== -1)
 
   return (
     <div>
       <h2>Puhelinluettelo</h2>
-        <input value={showAll} onChange={personsToShow}/>
+        <input value={showAll} onChange={handleSearchChange}/>
       <h2>Lisää uusi</h2>
       <form onSubmit={addName}>
         <div>
@@ -55,7 +57,7 @@ const App = () => {
       </form>
       <h2>Numerot</h2>
       <div>
-      {persons.map(e => <Person key={e.name} contacts={e}/>)}
+      {personsToShow.map(e => <Person key={e.name} contacts={e}/>)}
       </div>
     </div>
   )
