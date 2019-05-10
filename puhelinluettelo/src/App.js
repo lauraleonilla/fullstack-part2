@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Search from './components/Search'
 import Contacts from './components/Contacts'
-import axios from 'axios'
+import contactService from './services/contactService'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -10,7 +10,7 @@ const App = () => {
   const [ showAll, setShowall ] = useState('')
 
   useEffect(() => {
-      axios.get('http://localhost:3001/persons')
+      contactService.getAll()
       .then(res => setPersons(res.data))
   }, [])
 
@@ -23,6 +23,8 @@ const App = () => {
     if(persons.find(p => p.name === newName)) {
         alert(`${newName} on jo luettelossa!`)
     } else {
+      contactService.create(personObject)
+      .then(res => setPersons(persons.concat(res.data)))
         setPersons(persons.concat(personObject))
         setNewName('')
         setNewNumber('')
