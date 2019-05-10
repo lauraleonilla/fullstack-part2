@@ -1,14 +1,18 @@
-import React, { useState } from 'react'
-import Person from './components/Person'
+import React, { useState, useEffect } from 'react'
+import Search from './components/Search'
+import Contacts from './components/Contacts'
+import axios from 'axios'
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas' },
-    { name: 'LLL Hellas' }
-  ]) 
+  const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ showAll, setShowall ] = useState('')
+
+  useEffect(() => {
+      axios.get('http://localhost:3001/persons')
+      .then(res => setPersons(res.data))
+  }, [])
 
   const addName = (event) => {
     event.preventDefault()
@@ -42,7 +46,7 @@ const App = () => {
   return (
     <div>
       <h2>Puhelinluettelo</h2>
-        <input value={showAll} onChange={handleSearchChange}/>
+        <Search value={showAll} onChange={handleSearchChange}/>
       <h2>Lisää uusi</h2>
       <form onSubmit={addName}>
         <div>
@@ -55,10 +59,7 @@ const App = () => {
           <button type="submit">Lisää</button>
         </div>
       </form>
-      <h2>Numerot</h2>
-      <div>
-      {personsToShow.map(e => <Person key={e.name} contacts={e}/>)}
-      </div>
+     <Contacts contacts={personsToShow}/>
     </div>
   )
 
