@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Search from './components/Search'
 import Contacts from './components/Contacts'
+import axios from 'axios'
 import contactService from './services/contactService'
 
 const App = () => {
@@ -43,9 +44,12 @@ const App = () => {
       setShowall(event.target.value)
   }
 
-  const removeContact = (event) => {
-    contactService.remove(event.target)
-  }
+  const remove = (id) => {
+    const URL = `http://localhost:3001/persons/${id}`
+    const removable = persons.find(n => n.id === id)
+    console.log(removable)
+    return axios.delete(URL)
+}
 
   const personsToShow = persons.filter(e => e.name.toLowerCase().indexOf(showAll.toLowerCase()) !== -1)
 
@@ -65,7 +69,7 @@ const App = () => {
           <button type="submit">Lisää</button>
         </div>
       </form>
-     <Contacts contacts={personsToShow} remove={removeContact}/>
+     <Contacts contacts={personsToShow} remove={remove}/>
     </div>
   )
 
