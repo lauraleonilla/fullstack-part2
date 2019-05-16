@@ -6,7 +6,11 @@ const Contacts = ({ contacts, remove }) => {
         <div>
              <h2>Numerot</h2>
             <div>
-                {contacts.map(e => <Person key={e.id} contacts={e} remove={remove}/>)}
+                {contacts.map(e => 
+                <Person 
+                key={e.name} 
+                contacts={e} 
+                remove={() => remove(e.id)}/>)}
             </div>
         </div>
     )

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import Search from './components/Search'
 import Contacts from './components/Contacts'
-import axios from 'axios'
+import Input from './components/Input'
 import contactService from './services/contactService'
+import axios from 'axios';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -19,7 +20,7 @@ const App = () => {
     event.preventDefault()
     const personObject = {
         name: newName,
-        number: newNumber
+        number: newNumber,
     }
     if(persons.find(p => p.name === newName)) {
         alert(`${newName} on jo luettelossa!`)
@@ -44,11 +45,19 @@ const App = () => {
       setShowall(event.target.value)
   }
 
-  const remove = (id) => {
-    const URL = `http://localhost:3001/persons/${id}`
-    const removable = persons.find(n => n.id === id)
-    console.log(removable)
-    return axios.delete(URL)
+  const removePerson = (deleteId) => {
+    deleteId = persons.find(e => e.id === deleteId)
+    deleteId = deleteId.id
+    axios.delete(`http://localhost:3001/persons/${deleteId}`)
+    let updated = [ ...persons ]
+    for(let i = 0; i < persons.length; i ++) {
+      let person = persons[i]
+      if(person.id === deleteId) {
+        updated.splice(i, 1)
+        break
+      }
+    }
+    setPersons(updated)
 }
 
   const personsToShow = persons.filter(e => e.name.toLowerCase().indexOf(showAll.toLowerCase()) !== -1)
@@ -60,16 +69,16 @@ const App = () => {
       <h2>Lisää uusi</h2>
       <form onSubmit={addName}>
         <div>
-          Nimi: <input value={newName} onChange={handlePersonChange}/>
+          Nimi: <Input value={newName} onChange={handlePersonChange} />
           <div>
-          Numero: <input value={newNumber} onChange={handleNumberChange}/>
+          Numero: <Input value={newNumber} onChange={handleNumberChange} />
           </div>
         </div>
         <div>
           <button type="submit">Lisää</button>
         </div>
       </form>
-     <Contacts contacts={personsToShow} remove={remove}/>
+     <Contacts contacts={personsToShow} remove={removePerson} />
     </div>
   )
 
