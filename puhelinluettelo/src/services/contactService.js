@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from 'axios'
 const baseURL = 'http://localhost:3001/persons'
 
 const getAll = () => {
@@ -9,8 +9,11 @@ const create = (personObject) => {
     return axios.post(baseURL, personObject)
 }
 
+const remove = (deleteId) => {
+    return axios.delete(`${baseURL}/${deleteId}`)
+}
 
 export default {
-    getAll, create
+    getAll, create, remove
 }
 

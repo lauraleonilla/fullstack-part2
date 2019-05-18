@@ -3,7 +3,7 @@ import Search from './components/Search'
 import Contacts from './components/Contacts'
 import Input from './components/Input'
 import contactService from './services/contactService'
-import axios from 'axios';
+import axios from 'axios'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
@@ -23,7 +23,9 @@ const App = () => {
         number: newNumber,
     }
     if(persons.find(p => p.name === newName)) {
-        alert(`${newName} on jo luettelossa!`)
+      if(window.confirm(`${newName} on jo luettelossa, korvataanko numero uudella?`)) {
+        updateNumber(newName)
+      }
     } else {
       contactService.create(personObject)
       .then(res => setPersons(persons.concat(res.data)))
@@ -47,17 +49,34 @@ const App = () => {
 
   const removePerson = (deleteId) => {
     deleteId = persons.find(e => e.id === deleteId)
-    deleteId = deleteId.id
-    axios.delete(`http://localhost:3001/persons/${deleteId}`)
-    let updated = [ ...persons ]
-    for(let i = 0; i < persons.length; i ++) {
-      let person = persons[i]
-      if(person.id === deleteId) {
-        updated.splice(i, 1)
-        break
-      }
+    const name = persons.find(e => e.name === deleteId.name)
+      if(window.confirm(`Poistetaanko ${name.name}`)) {
+        deleteId = deleteId.id
+        contactService.remove(deleteId)
+        let updated = [ ...persons ]
+        for(let i = 0; i < persons.length; i ++) {
+          let person = persons[i]
+          if(person.id === deleteId) {
+            updated.splice(i, 1)
+            break
+          }
+        }
+        setPersons(updated)
     }
-    setPersons(updated)
+}
+
+const updateNumber = (newName) => {
+  let id  
+  let person = persons.find(e => {
+  id = e.id
+  return e.name === newName
+  })
+  const updatedPerson = { ...person, number: newNumber }
+  axios.put(`http://localhost:3001/persons/${id}`, updatedPerson).then(res => {
+    setPersons(persons.map(person => person.id !== id ? person : res.data))
+    setNewName('')
+    setNewNumber('')
+    })
 }
 
   const personsToShow = persons.filter(e => e.name.toLowerCase().indexOf(showAll.toLowerCase()) !== -1)
