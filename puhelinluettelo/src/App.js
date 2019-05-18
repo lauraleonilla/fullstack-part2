@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+
+import contactService from './services/contactService'
 import Search from './components/Search'
 import Contacts from './components/Contacts'
 import Input from './components/Input'
-import contactService from './services/contactService'
-import axios from 'axios'
+import { Message, Error } from './components/Message'
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ showAll, setShowall ] = useState('')
+  const [ message, setMessage ] = useState(null)
+  const [ isError, setIsError ] = useState(null)
 
   useEffect(() => {
       contactService.getAll()
@@ -30,6 +34,10 @@ const App = () => {
       contactService.create(personObject)
       .then(res => setPersons(persons.concat(res.data)))
         setPersons(persons.concat(personObject))
+        setMessage(`Lisättiin ${newName}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 3000)
         setNewName('')
         setNewNumber('')
     }
@@ -58,6 +66,10 @@ const App = () => {
           let person = persons[i]
           if(person.id === deleteId) {
             updated.splice(i, 1)
+            setMessage(`Poistettiin ${person.name}`)
+            setTimeout(() => {
+              setMessage(null)
+            }, 3000)
             break
           }
         }
@@ -72,11 +84,18 @@ const updateNumber = (newName) => {
   return e.name === newName
   })
   const updatedPerson = { ...person, number: newNumber }
-  axios.put(`http://localhost:3001/persons/${id}`, updatedPerson).then(res => {
-    setPersons(persons.map(person => person.id !== id ? person : res.data))
-    setNewName('')
-    setNewNumber('')
-    })
+    axios.put(`http://localhost:3001/persons/${id}`, updatedPerson).then(res => {
+      setPersons(persons.map(person => person.id !== id ? person : res.data))
+      setMessage(`Muutettiin ${person.name} numero`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
+      setNewName('')
+      setNewNumber('')
+      })
+    .catch (error => setIsError(`Henkilö on jo poistettu`))
+    setTimeout(() => setIsError(null), 3000)
+    setPersons(persons)
 }
 
   const personsToShow = persons.filter(e => e.name.toLowerCase().indexOf(showAll.toLowerCase()) !== -1)
@@ -84,6 +103,8 @@ const updateNumber = (newName) => {
   return (
     <div>
       <h2>Puhelinluettelo</h2>
+      <Message message={message}/>
+      <Error message={isError}/>
         <Search value={showAll} onChange={handleSearchChange}/>
       <h2>Lisää uusi</h2>
       <form onSubmit={addName}>
