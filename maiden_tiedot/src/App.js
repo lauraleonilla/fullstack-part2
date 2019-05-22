@@ -1,6 +1,6 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import Country from './components/Country';
+import Country from './components/Country'
 
 const App = () => {
 
@@ -27,4 +27,4 @@ const countriesToSHow = countries.filter(e => e.name.toLowerCase().indexOf(showA
   )
 }
 
-export default App;
+export default App
