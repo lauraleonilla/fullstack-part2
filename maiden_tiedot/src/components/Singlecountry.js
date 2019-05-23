@@ -8,8 +8,15 @@ const Singlecountry = ({ country }) => {
     useEffect(() => {
         const city = country.map(e => e.capital)
         axios.get(`http://api.apixu.com/v1/current.json?key=924f75b268d5495d83a113709191105&q=${city}`)
-        .then(res => setWeather(res.data.current.temp_c))
+            .then(res => setWeather(res.data))
     }, [country])
+
+    const showTemp = () => !weather ? 0 : weather.current.temp_c
+    const showWind = () => !weather ? 0 : weather.current.wind_kph
+    const showCondition = () => !weather ? '' : weather.current.condition.text
+    const showImage = () => !weather ? '' : weather.current.condition.icon
+    
+    console.log(weather)
 
     const countryToShow = country.map((e, index) => (
        [ <h2 key={index}>{e.name}</h2>,
@@ -23,14 +30,24 @@ const Singlecountry = ({ country }) => {
         ]
     ))
 
+    const watherDivStyles = {
+        display: 'flex',
+        justifyItems: 'flex-start',
+        alignItems: 'baseline'
+      }
+
     return (
         <div>
             {countryToShow}
-            <div>
-            <h3>Temperature:</h3>
-             <p>{weather} Celcius</p>
-            {/* <h3>Wind:</h3>
-            <p>{weather} Celcius</p>  */}
+            <div style={watherDivStyles}>
+                <h3>Temperature:</h3>&nbsp;<p>{showTemp()} Celcius</p>
+             </div>
+             <div style={watherDivStyles}>
+                <h3>Wind:</h3>&nbsp;<p>{showWind()} kph</p>
+            </div>
+            <img src={showImage()}alt="Country weather" width="100"/>
+            <div style={watherDivStyles}>
+                <h3>Condition:</h3>&nbsp;<p>{showCondition()}</p>
             </div>
         </div>
     )
