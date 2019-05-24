@@ -14,8 +14,8 @@ const Error = ({ error }) => {
 
 const Singlecountry = ({ country }) => {
 
-    const [weather, setWeather] = useState(0)
-    const [ isError, setIsError ] = useState(null)
+    const [weather, setWeather] = useState()
+    const [isError, setIsError] = useState(null)
 
     useEffect(() => {
         const city = country.map(e => e.capital)
