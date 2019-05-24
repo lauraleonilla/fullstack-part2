@@ -1,3 +1,3 @@
 # fullstack-part2
 
-Each assignment is located in its own branch.
+Each section is located in its own branch. Do npm install before npm start.
