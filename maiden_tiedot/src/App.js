@@ -16,13 +16,17 @@ const handleSearchChange = (event) => {
   setShowAll(event.target.value)
 }
 
+const clickHandler = (e) => {
+  setShowAll(e.name)
+}
+
 const countriesToSHow = countries.filter(e => e.name.toLowerCase().indexOf(showAll.toLowerCase()) !== -1)
 
   return (
     <div>
       <h2>Search countries</h2>
       <input value={showAll} onChange={handleSearchChange}/>
-      <Country countries={countriesToSHow}/>
+      <Country countries={countriesToSHow} clickHandler={clickHandler}/>
     </div>
   )
 }

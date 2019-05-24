@@ -1,22 +1,33 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 
+const Error = ({ error }) => {
+    const errorStyle = {
+        color: 'red'
+    }
+    return (
+        <div>
+            <h3 style={errorStyle}>{error}</h3>
+        </div>
+    )
+}
+
 const Singlecountry = ({ country }) => {
 
     const [weather, setWeather] = useState(0)
+    const [ isError, setIsError ] = useState(null)
 
     useEffect(() => {
         const city = country.map(e => e.capital)
         axios.get(`http://api.apixu.com/v1/current.json?key=924f75b268d5495d83a113709191105&q=${city}`)
             .then(res => setWeather(res.data))
+            .catch (error => setIsError('No data available'))
     }, [country])
 
     const showTemp = () => !weather ? 0 : weather.current.temp_c
     const showWind = () => !weather ? 0 : weather.current.wind_kph
     const showCondition = () => !weather ? '' : weather.current.condition.text
     const showImage = () => !weather ? '' : weather.current.condition.icon
-    
-    console.log(weather)
 
     const countryToShow = country.map((e, index) => (
        [ <h2 key={index}>{e.name}</h2>,
@@ -39,6 +50,7 @@ const Singlecountry = ({ country }) => {
     return (
         <div>
             {countryToShow}
+            <Error error={isError} />
             <div style={watherDivStyles}>
                 <h3>Temperature:</h3>&nbsp;<p>{showTemp()} Celcius</p>
              </div>

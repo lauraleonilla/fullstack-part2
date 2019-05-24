@@ -1,7 +1,7 @@
 import React from 'react'
 import Singlecountry from './Singlecountry'
 
-const Country = ({ countries }) => {
+const Country = ({ countries, clickHandler }) => {
 
     if(countries.length > 10) {
         return (
@@ -12,7 +12,7 @@ const Country = ({ countries }) => {
         const country = countries.map((e, index) => (
             [<p key={index}>{e.name}</p>, 
             <button key={e.name}
-            onClick={() => console.log(e.name)}>Show</button>]
+            onClick={() => clickHandler(e)}>Show</button>]
         ))
         return (
             <div>
