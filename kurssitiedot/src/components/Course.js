@@ -1,6 +1,5 @@
 import React from 'react'
 
-
 const Content = ({ course }) => {
     return (
         <div>
@@ -24,7 +23,6 @@ const Total = ({ parts }) => {
     }, 0)
     return <p>Yhteensä {total} tehtävää</p>
   }
-
 
 const Course = ({ course }) => {
     return (
